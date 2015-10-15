@@ -11,45 +11,45 @@ public class Countries {
   static Country  country;
     static final String fileName = "countries.txt";
     public static void main(String[] args) {
+       //Country country = new Country();
         Scanner scanner = new Scanner(System.in);
-        HashMap<String, ArrayList<Country>> countriesMap = new HashMap();
-        String allCountries = readFile(fileName);
-        String[] countryArray = allCountries.split("\n"); //  \n means new lines. will split postContent on the new lines for the array list
+        HashMap<String, ArrayList<Country>> countriesMap = new HashMap<>();
+        String countryContent = readFile(fileName);
+        String [] lines = countryContent.split("\n");
+
+        for (String line : lines){
+
+            String [] columns = line.split("\\|");
+            String firstLetter = String.valueOf(line.charAt(0));
+            ArrayList<Country> countryList = countriesMap.get(firstLetter);
+            String abrreviation = columns[0];
+            String name = columns[1];
+            Country country = new Country(abrreviation, name);
+            countriesMap.put(firstLetter, countryList);
 
 
-        for (String line : countryArray) {
-
-            String[] columns = line.split("\\|");
-            String abbreviation = columns[1];
-            String name = columns[0];
-            Country country = new Country(name, abbreviation);
-            if (countriesMap.containsKey(name.substring(0, 1))) {
-                countriesMap.get(name.substring(0, 1)).add(country);
-            } else
-            {
-                ArrayList<Country> countryList = new ArrayList();
+            if (countryList == null){
+                countryList = new ArrayList();
                 countryList.add(country);
-                countriesMap.put(name.valueOf(name.charAt(0)), countryList);
+                countriesMap.put(firstLetter, countryList);
+            } else{
+                countryList.add(country);
+            }
+
+        }
+        System.out.println("enter a letter");
+        String s = scanner.nextLine().toUpperCase();
+        String xFile = String.format("%s_countries.txt", s);
+
+        if(countriesMap.containsKey(s)) {
+            String newLine = "";
+            for(Country newCountry : countriesMap.get(s)) {
+
+                newLine += String.format("%s %s\n", newCountry.abrreviation, newCountry.name);
+
+                writeFile(xFile, newLine);
             }
         }
-
-        String countryInfo = "";
-        String s;
-        while (true) {
-
-            System.out.println("Enter a letter");
-            s = scanner.nextLine();
-
-            if (countriesMap.containsKey(s)) {
-                for (Country country : countriesMap.get(s)) {
-                    countryInfo = String.format("%s %s\n ", country.abrreviation, country.name);
-                }
-            }
-            writeFile(String.format("%s_countries.txt", s), countryInfo);
-            break;
-        }
-
-
 
     }//end main
 
