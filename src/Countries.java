@@ -1,5 +1,3 @@
-import jodd.json.JsonParser;
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -8,48 +6,47 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class Countries {
-  static Country  country;
+  //static Country  country;
     static final String fileName = "countries.txt";
     public static void main(String[] args) {
        //Country country = new Country();
         Scanner scanner = new Scanner(System.in);
         HashMap<String, ArrayList<Country>> countriesMap = new HashMap<>();
         String countryContent = readFile(fileName);
-        String [] lines = countryContent.split("\n");
+        String [] countryArray = countryContent.split("\n");
 
-        for (String line : lines){
+        for (String countryContents : countryArray){ //for loop goes through countArray and puts data into new string countryContents one at a time
+            String[] columns = countryContents.split("\\|");      //each slot of countryArray goes into new array columns after being split at the | via countryContents
+            String firstLetter = String.valueOf(countryContents.charAt(0)); //the firstletter (charAt(0)) is taken from countryContents as well
+            ArrayList<Country> countryList = countriesMap.get(firstLetter);//the first letter is taken from the hashmap and put into anoter arraylist some how...possibly voodoo
+            String abbreviation = columns[0]; //taking the first slot of columns (before the |) to receive the abbreviation
+            String name = columns[1]; //taking info from the second slot of columns to get the name
+            Country country = new Country(abbreviation, name);//new country object is created with the abbreviation and name
+            countriesMap.put(firstLetter, countryList);//hashmap slot added with the firstLetter as the key and the object from the countryList
 
-            String [] columns = line.split("\\|");
-            String firstLetter = String.valueOf(line.charAt(0));
-            ArrayList<Country> countryList = countriesMap.get(firstLetter);
-            String abrreviation = columns[0];
-            String name = columns[1];
-            Country country = new Country(abrreviation, name);
-            countriesMap.put(firstLetter, countryList);
 
-
-            if (countryList == null){
-                countryList = new ArrayList();
-                countryList.add(country);
-                countriesMap.put(firstLetter, countryList);
+            if (countryList == null){//inside for loop if there isn't a countryList a
+                countryList = new ArrayList();   // new one will be created
+                countryList.add(country);        //country object will be put into the new countryList
+                countriesMap.put(firstLetter, countryList);// the countryList and first letter will be put into the hashmap
             } else{
-                countryList.add(country);
+                countryList.add(country); //otherwise the countryList already exists and a country object is given to it
             }
 
-        }
-        System.out.println("enter a letter");
+        }//end for
+        System.out.println("Search by letter");
         String s = scanner.nextLine().toUpperCase();
-        String xFile = String.format("%s_countries.txt", s);
+        String countryInfo = String.format("%s_countries.txt", s); //uses users letter entry store *_countries.text into a string
 
-        if(countriesMap.containsKey(s)) {
-            String newLine = "";
-            for(Country newCountry : countriesMap.get(s)) {
+        if(countriesMap.containsKey(s)) { //if the hashmap containsKey(s) (the user's input)
+            String newLine = ""; //new empty string
+            for(Country newCountry : countriesMap.get(s)) {//the user's input will be used as the key to search the hashmap and put the info ito a newCountry object
 
-                newLine += String.format("%s %s\n", newCountry.abrreviation, newCountry.name);
+                newLine = String.format("%s %s\n", newCountry.abbreviation, newCountry.name); //the empty string is given the newCountry object's abbreviation and name
 
-                writeFile(xFile, newLine);
-            }
-        }
+                writeFile(countryInfo, newLine);//the string with info newLine is written to the new file who's name is taken from countyInfo
+            }//end of for loop
+        }//end if
 
     }//end main
 

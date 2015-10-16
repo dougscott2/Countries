@@ -3,18 +3,18 @@
  */
 public class Country {
     String name;
-    String abrreviation;
+    String abbreviation;
 
     public Country(String name, String abrreviation) {
         this.name = name;
-        this.abrreviation = abrreviation;
+        this.abbreviation = abrreviation;
     }
 
-    public String getName() {
+   /* public String getName() {
         return name;
     }
 
-    public String getAbrreviation() {
-        return abrreviation;
-    }
+    public String getAbbreviation() {
+        return abbreviation;
+    }*/
 }
