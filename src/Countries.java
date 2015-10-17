@@ -15,14 +15,22 @@ public class Countries {
         String countryContent = readFile(fileName);
         String [] countryArray = countryContent.split("\n");
 
-        for (String countryContents : countryArray){ //for loop goes through countArray and puts data into new string countryContents one at a time
-            String[] columns = countryContents.split("\\|");      //each slot of countryArray goes into new array columns after being split at the | via countryContents
-            String firstLetter = String.valueOf(countryContents.charAt(0)); //the firstletter (charAt(0)) is taken from countryContents as well
-            ArrayList<Country> countryList = countriesMap.get(firstLetter);//the first letter is taken from the hashmap and put into anoter arraylist some how...possibly voodoo
-            String abbreviation = columns[0]; //taking the first slot of columns (before the |) to receive the abbreviation
-            String name = columns[1]; //taking info from the second slot of columns to get the name
-            Country country = new Country(abbreviation, name);//new country object is created with the abbreviation and name
-            countriesMap.put(firstLetter, countryList);//hashmap slot added with the firstLetter as the key and the object from the countryList
+        for (String countryContents : countryArray){
+               //for loop goes through countArray and puts data into new string countryContents one at a time
+            String[] columns = countryContents.split("\\|");
+               //each slot of countryArray goes into new array columns after being split at the | via countryContents
+            String firstLetter = String.valueOf(countryContents.charAt(0));
+               //the firstletter (charAt(0)) is taken from countryContents as well
+            ArrayList<Country> countryList = countriesMap.get(firstLetter);
+               //creating array list based off of each first letter and putting it in the HashMap
+            String abbreviation = columns[0];
+            //taking the first slot of columns (before the |) to receive the abbreviation
+            String name = columns[1];
+            //taking info from the second slot of columns to get the name
+            Country country = new Country(abbreviation, name);
+            //new country object is created with the abbreviation and name
+            countriesMap.put(firstLetter, countryList);
+            //hashmap slot added with the firstLetter as the key and the object from the countryList
 
 
             if (countryList == null){//inside for loop if there isn't a countryList a
