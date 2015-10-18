@@ -1,4 +1,5 @@
 import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
+import jodd.json.JsonSerializer;
 
 import java.io.File;
 import java.io.FileReader;
@@ -20,17 +21,15 @@ public class Countries {
         System.out.println("Enter a letter");
         String input = scanner.nextLine();
 
-        if (input.length() == 1){
+        if (input.length() == 1){  //not throwing exception but could by having the else have throw Exception e; and make sure
+            //the main class could throw exceptions
             countryMethod(input.toUpperCase(), countryArray, countriesMap);
+
         } else {
             System.out.println("Invalid entry, please try again");
             String newInput = scanner.nextLine();
             input = newInput;
         }
-
-
-
-
     }//end main
     public static void countryMethod(String s, String[] array, HashMap<String, ArrayList<Country>> map) {
         for (String countryContents : array) {
@@ -71,6 +70,7 @@ public class Countries {
                 newLine = newLine + String.format("%s %s\n", newCountry.abbreviation, newCountry.name); //the empty string is given the newCountry object's abbreviation and name
 
                 writeFile(countryInfo, newLine);//the string with info newLine is written to the new file who's name is taken from countyInfo
+            saveCountries();
             }//end of for loop
         }//end if
     }//end countryMethod
@@ -96,6 +96,19 @@ public class Countries {
             fw.close();
         } catch (Exception e){
 
+        }
+    }
+    static void saveCountries() { //attempted to just add the method from the serializer project
+        //and save both to a .txt file and the save.json file
+        File f = new File("save.json");
+        JsonSerializer serializer = new JsonSerializer();  //json serializer
+        String contentToSave = serializer.serialize(country);
+        try {
+            FileWriter fw = new FileWriter(f);
+            fw.write(contentToSave);
+            fw.close();
+        } catch (Exception e) {
+            System.out.println("Something went wrong...sorry!");
         }
     }
 }
