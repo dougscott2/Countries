@@ -1,3 +1,5 @@
+import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -17,7 +19,15 @@ public class Countries {
         String [] countryArray = countryContent.split("\n");
         System.out.println("Enter a letter");
         String input = scanner.nextLine();
-        countryMethod(input, countryArray, countriesMap);
+
+        if (input.length() == 1){
+            countryMethod(input.toUpperCase(), countryArray, countriesMap);
+        } else {
+            System.out.println("Invalid entry, please try again");
+            String newInput = scanner.nextLine();
+            input = newInput;
+        }
+
 
 
 
