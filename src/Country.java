@@ -1,7 +1,7 @@
 /**
  * Created by DrScott on 10/15/15.
  */
-public class Country {
+public class Country extends Countries{
     String name;
     String abbreviation;
 
@@ -10,11 +10,15 @@ public class Country {
         this.abbreviation = abrreviation;
     }
 
-   /* public String getName() {
+    public void test(String input) {
+
+    }
+
+    public String getName() {  //getters for JSON
         return name;
     }
 
     public String getAbbreviation() {
         return abbreviation;
-    }*/
+    }
 }
