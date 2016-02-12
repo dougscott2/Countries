@@ -10,9 +10,6 @@ public class Country extends Countries{
         this.abbreviation = abrreviation;
     }
 
-    public void test(String input) {
-
-    }
 
     public String getName() {  //getters for JSON
         return name;

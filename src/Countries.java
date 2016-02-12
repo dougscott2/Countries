@@ -1,3 +1,5 @@
+import jodd.json.JsonSerializer;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -8,8 +10,8 @@ import java.util.Scanner;
 public class Countries {
   static Country  country;
     static final String FILE_NAME = "countries.txt";
+    public static JsonSerializer serializer = new JsonSerializer();
     public static void main(String[] args) {
-    while (true) {
         Scanner scanner = new Scanner(System.in);
         HashMap<String, ArrayList<Country>> countriesMap = new HashMap<>();
         String countryContent = readFile(FILE_NAME);
@@ -26,24 +28,31 @@ public class Countries {
          else {
            System.out.println("Invalid entry, please try again");
          }
-    }
+        System.out.println(countriesMap.get("A"));
 
  }//end main
     public static void countryMethod(String s, String[] array, HashMap<String, ArrayList<Country>> map) {
         for (String countryContents : array) {
             //for loop goes through countArray and puts data into new string countryContents one at a time
+
             String[] columns = countryContents.split("\\|");
             //each slot of countryArray goes into new array columns after being split at the | via countryContents
+
             String firstLetter = String.valueOf(countryContents.charAt(0));
             //the firstletter (charAt(0)) is taken from countryContents as well
+
             ArrayList<Country> countryList = map.get(firstLetter);
             //creating array list based off of each first letter and putting it in the HashMap
+
             String abbreviation = columns[0];
             //taking the first slot of columns (before the |) to receive the abbreviation
+
             String name = columns[1];
             //taking info from the second slot of columns to get the name
-            Country country = new Country(abbreviation, name);
+
+            Country country = new Country(name, abbreviation);
             //new country object is created with the abbreviation and name
+
             map.put(firstLetter, countryList);
             //hashmap slot added with the firstLetter as the key and the object from the countryList
 
@@ -57,16 +66,17 @@ public class Countries {
             }
 
         }
-        String countryInfo = String.format("%s_countries.txt", s); //uses users letter entry store *_countries.text into a string
-        if (map.containsKey(s)) { //if the hashmap containsKey(s) (the user's input)
-            String newLine = ""; //populates newLine with an empty string
-            for (Country newCountry : map.get(s)) {//the user's input will be used as the key to search the hashmap and put the info ito a newCountry object
 
-                newLine = newLine + String.format("%s %s\n", newCountry.abbreviation, newCountry.name); //the empty string is given the newCountry object's abbreviation and name
-
-                writeFile(countryInfo, newLine);//the string with info newLine is written to the new file who's name is taken from countyInfo
-            }//end of for loop
-        }//end if
+        String fileName = String.format("%s_countries.txt", s);
+        if (map.containsKey(s)) {
+            //String newLine = "";
+            String contentToSave = "";
+            for (Country tempCountry : map.get(s)) {
+                //newLine = newLine + String.format("%s %s\n", newCountry.abbreviation, newCountry.name); //the empty string is given the newCountry object's abbreviation and name
+                contentToSave += serializer.serialize(tempCountry)+"\n";
+                writeFile(fileName, contentToSave+"\n");
+            }
+        }
     }//end countryMethod
 
     static String readFile(String fileName) {
